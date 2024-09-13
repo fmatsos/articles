@@ -1,0 +1,20 @@
+name: Update site on push
+
+on:
+    push:
+        branches: [ main ]
+
+jobs:
+    update-site:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Trigger workflow in another repository
+              env:
+                  GITHUB_TOKEN: ${{ secrets.SITE_TOKEN }}
+              run: |
+                  curl -X POST \
+                  -H "Authorization: token $GITHUB_TOKEN" \
+                  -H "Accept: application/vnd.github.v3+json" \
+                  https://api.github.com/repos/fmatsos/fmatsos.github.io/actions/workflows/build-and-deploy.yml/dispatches \
+                  -d '{"ref":"master"}'
