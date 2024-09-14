@@ -51,9 +51,9 @@ Maintenant, je dois me dérouiller.
 
 ## Conclusion
 
-Voilà pour les **gros** chantiers de l'année (scolaire) à venir. Je reste limité, sans viser la Lune, car tout changement, tout nouvelle habitude, demande des ressources (cognitives) dont on ne se rend que rarement compte. Même le ou la plus anodine. Je ne charge donc pas la mule, comme on dit, afin de me tenir à ces trois objectifs dans un premier temps pour les prochains mois. Nous verrons par la suite, selon leur déroulement, ce que je pourrais ajouter.
+Voilà pour les **gros** chantiers de l'année (scolaire) à venir. Je reste limité, sans viser la Lune, car tout changement, tout nouvelle habitude, demande des ressources (cognitives) dont on ne se rend que rarement compte. Même le ou la plus anodine. Ce qui mène trop souvent à l'abandon des objectifs que l'on s'est fixé (comme les résolutions du début d'année ?). Je ne charge donc pas la mule, comme on dit, afin de me tenir à ces trois objectifs dans un premier temps pour les prochains mois. Nous verrons par la suite, selon leur déroulement, ce que je pourrais ajouter.
 
-Je vais faire en sorte d'écrire aussi régulièrement que possible, sans pour autant être me mettre la pression à tenir une cadence. En espérant fournir un contenu qualitatif autant que possible.
+Je vais faire en sorte d'écrire aussi régulièrement que possible, sans pour autant me mettre la pression à tenir une cadence. En espérant fournir un contenu qualitatif autant que possible.
 
 À très bientôt pour la suite !
 
