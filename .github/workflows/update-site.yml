@@ -18,5 +18,5 @@ jobs:
                   -H "Accept: application/vnd.github.v3+json" \
                   https://api.github.com/repos/fmatsos/fmatsos.github.io/actions/workflows/build-and-deploy.yml/dispatches \
                   -d '{"ref":"master"}'
-#            - name: Trigger Netflify build
-#              run: curl -X POST -d {} https://api.netlify.com/build_hooks/66e7e320af8a91de68cd26b1?trigger_title=Articles+updates+trigger
+            - name: Trigger Netflify build
+              run: curl -X POST -d {} https://api.netlify.com/build_hooks/66e7e320af8a91de68cd26b1?trigger_title=Articles+updates+trigger
