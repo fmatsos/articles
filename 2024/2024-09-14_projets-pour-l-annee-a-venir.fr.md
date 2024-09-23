@@ -2,9 +2,7 @@
 title: "Projets pour l'année à venir"
 published: true
 draft: false
-date: 2024-09-14
 tags: [blog,divers]
-slug: 14-projets-pour-l-annee-a-venir
 ---
 
 Un petit récapitulatif des projets personnels et professionnels à venir pour l'année _scolaire_ 2024/2025.
