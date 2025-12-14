@@ -1,22 +1,17 @@
-name: Update site on push
+name: Trigger site sync
 
 on:
-    push:
-        branches: [ main ]
+  push:
+    branches: [main]
 
 jobs:
-    update-site:
-        runs-on: ubuntu-latest
-
-        steps:
-            - name: Trigger Github build
-              env:
-                  GITHUB_TOKEN: ${{ secrets.SITE_TOKEN }}
-              run: |
-                  curl -X POST \
-                  -H "Authorization: token $GITHUB_TOKEN" \
-                  -H "Accept: application/vnd.github.v3+json" \
-                  https://api.github.com/repos/fmatsos/fmatsos.github.io/actions/workflows/build-and-deploy.yml/dispatches \
-                  -d '{"ref":"main"}'
-            - name: Trigger Netflify build
-              run: curl -X POST -d {} https://api.netlify.com/build_hooks/66e7e320af8a91de68cd26b1?trigger_title=Articles+updates+trigger
+  trigger-sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger fmatsos.github.io sync workflow
+        run: |
+          curl -X POST \
+            -H "Authorization: token ${{ secrets.SITE_TOKEN }}" \
+            -H "Accept: application/vnd.github.v3+json" \
+            https://api.github.com/repos/fmatsos/fmatsos.github.io/dispatches \
+            -d '{"event_type": "articles-updated"}'
