@@ -8,7 +8,9 @@ draft: false
 tags: [blog,symfony]
 ---
 
-Dans le cadre de mes révisions pour la certification Symfony, j'ai créé un projet afin d'explorer les différentes facettes du framework que je ne connaissais pas ou peu. Ce projet, suivant une architecture proche du DDD et intégrant ADR, m'a conduit à modifier fortement la configuration de base de Symfony, y compris le Kernel.
+Dans le cadre de mes révisions pour la certification Symfony, j'ai créé un projet afin d'explorer les différentes facettes
+du framework que je ne connaissais pas ou peu. Ce projet, suivant une architecture proche du DDD et intégrant ADR, m'a
+conduit à modifier fortement la configuration de base de Symfony, y compris le Kernel.
 
 <!-- excerpt -->
 
@@ -25,63 +27,17 @@ use Symfony\Component\HttpKernel\Kernel as BaseKernel;
 class Kernel extends BaseKernel
 {
     use MicroKernelTrait;
-
-    private const CONFIG_EXTS = '.{php,xml,yaml,yml}';
-
-    public function getCacheDir(): string
-    {
-        return $this->getProjectDir() . '/var/cache/' . $this->environment;
-    }
-
-    public function getLogDir(): string
-    {
-        return $this->getProjectDir() . '/var/log';
-    }
-
-    public function registerBundles(): iterable
-    {
-        $contents = require $this->getProjectDir() . '/config/bundles.php';
-        foreach ($contents as $class => $envs) {
-            if ($envs[$this->environment] ?? $envs['all'] ?? false) {
-                yield new $class();
-            }
-        }
-    }
-
-    protected function configureContainer(ContainerBuilder $container, LoaderInterface $loader): void
-    {
-        $container->addResource(new FileResource($this->getProjectDir() . '/config/bundles.php'));
-        $container->setParameter('container.dumper.inline_class_loader',
-            \PHP_VERSION_ID < 70400 || $this->debug);
-        $confDir = $this->getProjectDir() . '/config';
-
-        $loader->load($confDir . '/services' . self::CONFIG_EXTS, 'glob');
-        $loader->load($confDir . '/services_' . $this->environment . self::CONFIG_EXTS, 'glob');
-    }
-
-    protected function configureRoutes(RouteCollectionBuilder $routes): void
-    {
-        $confDir = $this->getProjectDir() . '/config';
-
-        $routes->import($confDir . '/routes' . self::CONFIG_EXTS, '/', 'glob');
-        $routes->import($confDir . '/routes_' . $this->environment . self::CONFIG_EXTS, '/', 'glob');
-    }
 }
 ```
 
-Ce Kernel utilise le trait `MicroKernelTrait` qui fournit une implémentation minimaliste de l'interface `HttpKernelInterface`. C'est un excellent point de départ, mais dans le contexte d'une architecture DDD, j'ai eu besoin de l'adapter.
+On ne peut faire plus minimaliste : nous héritons du Kernel par défaut (que nous renommons `BaseKernel`), qui inclut toute
+la logique permettant de faire la _glue_ du framework et d'assurer son bon fonctionnement. Pour les méthodes abstraites de
+celui-ci, nous utilisons le `MicroKernelTrait`, qui fournit le corps des méthodes et facilite la configuration de Symfony.
 
-## Besoins spécifiques du projet
+Maintenant, voici ma problématique : dans le projet, je définis certaines configurations, comme mes Workflows, dans le
+namespace `App\Infrastructure\Symfony\Config`. Je dois donc indiquer au Kernel où et comment charger ces fichiers.
 
-Mon objectif était de créer une architecture où :
-- Les bundles seraient organisés par domaine métier
-- Les services seraient chargés différemment selon le contexte
-- Les routes seraient namespaced par domaine
-- Le conteneur de services serait plus granulaire
-
-## Modifications du Kernel
-
-Voici comment j'ai personnalisé le Kernel :
+Par défaut, je pars sur cette implémentation :
 
 ```php
 <?php
@@ -90,97 +46,83 @@ namespace App;
 
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Component\Config\Loader\LoaderInterface;
-use Symfony\Component\Config\Resource\FileResource;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpKernel\Kernel as BaseKernel;
-use Symfony\Component\Routing\RouteCollectionBuilder;
 
 class Kernel extends BaseKernel
 {
     use MicroKernelTrait;
 
-    private const CONFIG_EXTS = '.{php,xml,yaml,yml}';
-
-    public function getCacheDir(): string
+    public function registerContainerConfiguration(LoaderInterface $loader): void
     {
-        return $this->getProjectDir() . '/var/cache/' . $this->environment;
-    }
+        $files = new Finder()
+            ->files()
+            ->in($this->getProjectDir().'/src/Infrastructure/Symfony/Config')
+            ->name('*.php');
 
-    public function getLogDir(): string
-    {
-        return $this->getProjectDir() . '/var/log';
-    }
-
-    public function registerBundles(): iterable
-    {
-        $contents = require $this->getProjectDir() . '/config/bundles.php';
-        foreach ($contents as $class => $envs) {
-            if ($envs[$this->environment] ?? $envs['all'] ?? false) {
-                yield new $class();
-            }
+        foreach ($files as $file) {
+            $loader->load($file->getRealPath());
         }
-    }
-
-    protected function configureContainer(ContainerBuilder $container, LoaderInterface $loader): void
-    {
-        $container->addResource(new FileResource($this->getProjectDir() . '/config/bundles.php'));
-        $container->setParameter('container.dumper.inline_class_loader',
-            \PHP_VERSION_ID < 70400 || $this->debug);
-        
-        $confDir = $this->getProjectDir() . '/config';
-
-        // Load global services
-        $loader->load($confDir . '/services' . self::CONFIG_EXTS, 'glob');
-        
-        // Load domain-specific services
-        $domainsDir = $this->getProjectDir() . '/src/Domain';
-        if (is_dir($domainsDir)) {
-            foreach (scandir($domainsDir) as $domain) {
-                if ($domain !== '.' && $domain !== '..' && is_dir("$domainsDir/$domain")) {
-                    $servicesFile = "$domainsDir/$domain/config/services.yaml";
-                    if (file_exists($servicesFile)) {
-                        $loader->load($servicesFile);
-                    }
-                }
-            }
-        }
-        
-        // Load environment-specific services
-        $loader->load($confDir . '/services_' . $this->environment . self::CONFIG_EXTS, 'glob');
-    }
-
-    protected function configureRoutes(RouteCollectionBuilder $routes): void
-    {
-        $confDir = $this->getProjectDir() . '/config';
-
-        // Load global routes
-        $routes->import($confDir . '/routes' . self::CONFIG_EXTS, '/', 'glob');
-        
-        // Load domain-specific routes
-        $domainsDir = $this->getProjectDir() . '/src/Domain';
-        if (is_dir($domainsDir)) {
-            foreach (scandir($domainsDir) as $domain) {
-                if ($domain !== '.' && $domain !== '..' && is_dir("$domainsDir/$domain")) {
-                    $routesFile = "$domainsDir/$domain/config/routes.yaml";
-                    if (file_exists($routesFile)) {
-                        $routes->import($routesFile, "/$domain", 'yaml');
-                    }
-                }
-            }
-        }
-        
-        // Load environment-specific routes
-        $routes->import($confDir . '/routes_' . $this->environment . self::CONFIG_EXTS, '/', 'glob');
     }
 }
 ```
 
-## Points clés
+Cependant, j'ai rencontré une erreur lorsque j'exécutais `bin/console` :
 
-1. **Chargement dynamique des services par domaine** : Le Kernel scanne le répertoire `src/Domain` et charge automatiquement les fichiers `services.yaml` de chaque domaine.
+```bash
+Attempted to load class "BaseCommand" from namespace "Composer\Command".
+Did you forget a "use" statement for another namespace?
+```
 
-2. **Préfixage des routes par domaine** : Les routes de chaque domaine sont préfixées automatiquement, créant une séparation claire.
+Je vous épargne les détails du débogage pour trouver la source du problème. Ce qu'il faut savoir, c'est que la méthode
+`registerContainerConfiguration` est déjà définie dans `MicroKernelTrait`. C'est elle qui se charge de configurer le
+container. Étant donné que mon implémentation vient surcharger celle définie dans le trait, je court-circuite toutes les
+étapes permettant de charger les configurations du container, rendant ainsi ma console inopérante.
 
-3. **Maintien de la compatibilité** : Le chargement global des services et routes reste intact, assurant que le code existant fonctionne toujours.
+Il faut donc corriger le code précédent pour que, dans mon implémentation de registerContainerConfiguration, je puisse
+appeler l'implémentation disponible dans le trait. Mais comme nous sommes dans un trait, nous ne pouvons pas utiliser
+`parent::registerContainerConfiguration`.
 
-Cette approche offre une grande flexibilité tout en maintenant la simplicité du `MicroKernelTrait`. Elle permet à chaque domaine d'être autonome en termes de configuration, facilitant ainsi la maintenabilité du projet.
+La solution consiste à utiliser un alias pour la méthode du trait :
+
+```php
+<?php
+
+namespace App;
+
+use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
+use Symfony\Component\Config\Loader\LoaderInterface;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\Finder\Finder;
+use Symfony\Component\HttpKernel\Kernel as BaseKernel;
+
+class Kernel extends BaseKernel
+{
+    use MicroKernelTrait {
+        registerContainerConfiguration as microKernelRegisterContainerConfiguration;
+    }
+
+    public function registerContainerConfiguration(LoaderInterface $loader): void
+    {
+        $this->microKernelRegisterContainerConfiguration($loader);
+
+        $files = new Finder()
+            ->files()
+            ->in($this->getProjectDir().'/src/Infrastructure/Symfony/Config')
+            ->name('*.php');
+
+        foreach ($files as $file) {
+            $loader->load($file->getRealPath());
+        }
+    }
+}
+```
+
+Et voilà !
+
+L'utilisation des alias sur les traits est assez peu fréquente, car elle répond souvent à des besoins particuliers. Je
+peux maintenant avoir ma propre implémentation tout en conservant celle fournie par Symfony, qui se charge pour moi du
+chargement de toutes les configurations liées au framework.
+
+*[DDD]: Domain Driven Design
+*[ADR]: Action-Domain-Responder
