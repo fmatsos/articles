@@ -3,6 +3,7 @@ name: Trigger site sync
 on:
   push:
     branches: [main]
+  workflow_dispatch:
 
 jobs:
   trigger-sync:
