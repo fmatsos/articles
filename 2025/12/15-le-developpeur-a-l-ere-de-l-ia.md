@@ -16,6 +16,7 @@ C’est une question qui revient sans cesse, presque un classique de notre indus
 On peut voir cela comme un dilemme permanent, une tension entre deux écoles.
 - D'un côté, il y a la maîtrise technique pure — la capacité à produire un code élégant, performant, une architecture qui résiste à la charge.
 - De l'autre, il y a la capacité à comprendre un besoin, à cadrer un problème flou et à livrer une solution qui sert réellement les utilisateurs.
+
 Pendant longtemps, chacun pouvait placer le curseur selon ses affinités, son expérience ou la culture de son entreprise.
 
 Mais depuis l’arrivée de l’IA dans nos éditeurs de code, j'ai le sentiment que cette question prend une autre dimension.
