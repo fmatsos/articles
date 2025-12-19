@@ -41,7 +41,7 @@ Faut-il pour autant abandonner les MCP ? Absolument pas. Ils restent excellents 
 
 Mais le secret réside dans ce qu'on choisit de *montrer* au modèle.
 
-C'est ici que l'approche des **tools custom** (tels qu'on les définit simplement dans `.opencode/tool/`) prend tout son sens. Plutôt que d'exposer un catalogue brut de primitives via un serveur MCP, je préfère désormais construire des outils qui encodent une **intention**.
+C'est ici que l'approche des **tools custom de Opencode** prend tout son sens. Plutôt que d'exposer un catalogue brut de primitives via un serveur MCP, je préfère désormais construire des outils qui encodent une **intention**.
 
 Prenons un cas concret : **GitHub**.
 
