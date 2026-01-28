@@ -63,4 +63,6 @@ Retrouver le silence mental, celui qui permet de penser sans être tiré dans to
 
 Le monde avancera avec ou sans vous.
 
-**Mais on avance lorsque l'on cesse de réagir à tout, en permanence, et que l'on prend de la distance.**
+**Mais on avance mieux, plus sereinement, lorsque l'on cesse de réagir à tout, en permanence, et que l'on arrive à prendre de la distance.**
+
+Et ceci est encore plus vrai que jamais.
