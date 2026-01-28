@@ -8,9 +8,7 @@ draft: false
 tags: [blog,réflexion]
 ---
 
-Après 15 années dans la Tech, j'ai appris un truc simple : ce n'est pas celui qui capte le plus d'infos qui avance. C'est celui qui filtre le mieux.
-
-Et l'IA, entre-temps, est venu nous plonger dans un bruit toujours plus assourdissant.
+Après 15 années dans la Tech, j'ai appris un truc simple : ce n'est pas celui qui capte le plus d'infos qui avance. C'est celui qui filtre le mieux. L'IA, entre-temps, est venu nous plonger dans un bruit toujours plus assourdissant.
 
 <!-- excerpt -->
 
