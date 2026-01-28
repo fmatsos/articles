@@ -1,8 +1,8 @@
 ---
 title: "Tests fonctionnels : la spec exécutable (et la dette qui ment)"
 description: "Un test fonctionnel non maintenu est une dette qui ment. Découvrez comment transformer vos tests en specs exécutables pour sécuriser vos règles métier critiques."
-pubDate: "2025-12-22"
-lang: "fr"
+pubDate: 2025-12-22
+lang: fr
 draft: true
 tags:
   - "tests"
