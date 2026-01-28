@@ -1,7 +1,7 @@
 ---
 title: "Filtrer le bruit. Retrouver l'essentiel"
 description: "Entre tendances éphémères, personas et FOMO, le bruit monte, surtout avec l'IA. Filtrer est plus que jamais une nécessité."
-pubDate: 2025-01-28
+pubDate: 2026-01-28
 lang: fr
 published: true
 draft: false
