@@ -54,6 +54,6 @@ Pour moi, la loyauté s'arrête net à deux moments :
 
 La règle que je garde en tête est simple :
 
-**si la loyauté n'est pas réciproque, ce n'est pas de la loyauté.**
+> **si la confiance n'est pas réciproque, aucune loyauté ne peut exister.**
 
 Et franchement, ça évite pas mal de source de tensions, en plus d'assainir les relations.
