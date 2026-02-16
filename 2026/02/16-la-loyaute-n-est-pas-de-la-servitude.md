@@ -1,15 +1,11 @@
 ---
 title: "La loyauté n'est pas de la servitude"
 description: "La loyauté repose sur la confiance. La confondre avec la soumission transforme une qualité en soupçon et abîme les relations."
-pubDate: "2026-02-14"
-lang: "fr"
+pubDate: 2026-02-14
+lang: fr
 published: true
 draft: false
-tags:
-  - "réflexion"
-  - "travail"
-  - "relations"
-  - "management"
+tags: [blog,réflexion,relations,management]
 ---
 
 Il y a des mots qui devraient être simples... et qui, dans le monde pro, finissent par devenir tordus.  
