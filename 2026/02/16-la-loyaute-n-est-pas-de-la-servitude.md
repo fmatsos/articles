@@ -8,9 +8,7 @@ draft: false
 tags: [blog,réflexion,relations,management]
 ---
 
-Il y a des mots qui devraient être simples... et qui, dans le monde pro, finissent par devenir tordus.  
-
-"Loyauté", typiquement.
+Il y a des mots qui devraient être simples... et qui, dans le monde pro, finissent par devenir tordus. Le terme de "Loyauté" par exemple.
 
 <!-- excerpt -->
 
